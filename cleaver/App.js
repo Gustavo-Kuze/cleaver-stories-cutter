@@ -14,6 +14,7 @@ import {
   View,
   StatusBar,
   Dimensions,
+  ToastAndroid,
 } from 'react-native';
 
 import {
@@ -25,6 +26,10 @@ import {
   Item,
   Text,
   Icon,
+  Body,
+  Left,
+  Right,
+  Title,
 } from 'native-base';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 
@@ -35,14 +40,14 @@ const App: () => React$Node = () => {
       <SafeAreaView>
         <ScrollView contentInsetAdjustmentBehavior="automatic">
           <Container>
-            <Header />
+            <Header>
+              <Body>
+                <Title>Cleaver</Title>
+              </Body>
+            </Header>
             <Grid>
               <Row>
-                <Col
-                  style={{
-                    backgroundColor: '#f5f5f5',
-                    height: Dimensions.get('screen').height,
-                  }}>
+                <Col style={styles.mainCol}>
                   <Row style={{marginTop: 50}}>
                     <Col size={10}>
                       <Form>
@@ -56,9 +61,32 @@ const App: () => React$Node = () => {
                     </Col>
                     <Col size={4} style={styles.searchButton}>
                       <Button
-                        onPress={() => console.log('teste')}
+                        rounded
+                        info
+                        onPress={() => {
+                          ToastAndroid.show(
+                            'Apenas um teste',
+                            ToastAndroid.SHORT,
+                          );
+                        }}
                         style={styles.button}>
                         <Icon type="FontAwesome" name="search" />
+                      </Button>
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col>
+                      <Button
+                        large
+                        success
+                        onPress={() => {
+                          ToastAndroid.show(
+                            'Botão "Processar" foi clicado',
+                            ToastAndroid.SHORT,
+                          );
+                        }}
+                        style={styles.button}>
+                        <Text>Processar</Text>
                       </Button>
                     </Col>
                   </Row>
@@ -78,6 +106,10 @@ const styles = StyleSheet.create({
   },
   searchButton: {
     height: 300,
+  },
+  mainCol: {
+    backgroundColor: '#f5f5f5',
+    height: Dimensions.get('screen').height,
   },
 });
 
