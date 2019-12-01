@@ -32,14 +32,14 @@ import {Col, Row, Grid} from 'react-native-easy-grid';
 
 import FilePicker from 'react-native-file-picker';
 
-// video path /data/user/0/com.cleaver/cache/video.mp4
+// video path storage/emulated/0/Download/video.mp4
 
 const App: () => React$Node = () => {
   const [filePath, setFilePath] = useState('');
 
   const showFilePicker = () => {
     FilePicker.showFilePicker(null, response => {
-      setFilePath(response.path);
+      setFilePath(response.uri);
       ToastAndroid.show(response.path, ToastAndroid.SHORT);
 
       if (response.didCancel) {
