@@ -32,6 +32,8 @@ import {Col, Row, Grid} from 'react-native-easy-grid';
 
 import FilePicker from 'react-native-file-picker';
 
+// video path /data/user/0/com.cleaver/cache/video.mp4
+
 const App: () => React$Node = () => {
   const [filePath, setFilePath] = useState('');
 
@@ -69,7 +71,6 @@ const App: () => React$Node = () => {
                       <Form>
                         <Item>
                           <Input
-                            disabled
                             placeholder="Caminho do arquivo de vídeo"
                             value={filePath}
                           />
@@ -103,6 +104,9 @@ const App: () => React$Node = () => {
                     </Col>
                   </Row>
                 </Col>
+              </Row>
+              <Row>
+                <Col />
               </Row>
             </Grid>
           </Container>
