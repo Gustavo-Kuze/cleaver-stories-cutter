@@ -40,30 +40,41 @@ const App: () => React$Node = () => {
 
   const showFilePicker = () => {
     FilePicker.showFilePicker(null, response => {
-      setFilePath(response.uri);
-      const path = `file://${response.path}`;
-      RNFFmpeg.getMediaInformation(path)
-        .then(info => {
-          console.log('Result: ' + JSON.stringify(info));
-        })
-        .catch(err => console.error(err));
-
-      RNFFmpeg.execute(
-        ` -ss 00:00:00 -i ${path} -to 00:00:15 ${path}.output.mp4`,
-      ).then(result =>
-        console.log('FFmpeg process exited with rc ' + result.rc),
-      );
-
-      ToastAndroid.show(response.path, ToastAndroid.SHORT);
-
       if (response.didCancel) {
-        ToastAndroid.show('Cancelado', ToastAndroid.SHORT);
+        ToastAndroid.show(
+          'Você não escolheu nenhum arquivo!',
+          ToastAndroid.SHORT,
+        );
       } else if (response.error) {
         ToastAndroid.show(response.error, ToastAndroid.LONG);
       } else {
-        // aqui da pra setar no state qual arquivo foi escolhido
+        const path = `file://${response.path}`;
+        setFilePath(path);
       }
     });
+  };
+
+  const processCutting = () => {
+    if (!filePath) {
+      ToastAndroid.show(
+        'Você ainda não escolheu um arquivo!',
+        ToastAndroid.SHORT,
+      );
+    }
+
+    RNFFmpeg.getMediaInformation(filePath)
+      .then(info => {
+        console.log('Result: ' + JSON.stringify(info));
+      })
+      .catch(err => console.error(err));
+
+    RNFFmpeg.execute(
+      ` -ss 00:00:00 -i ${filePath} -to 00:00:15 ${filePath}.output.mp4`,
+    ).then(result => console.log('FFmpeg process exited with rc ' + result.rc));
+  };
+
+  const cancelCutting = () => {
+    RNFFmpeg.cancel();
   };
 
   return (
@@ -104,23 +115,23 @@ const App: () => React$Node = () => {
                   <Row>
                     <Col>
                       <Button
-                        large
+                        danger
+                        bordered
+                        onPress={cancelCutting}
+                        style={styles.button}>
+                        <Text>Cancelar</Text>
+                      </Button>
+                    </Col>
+                    <Col>
+                      <Button
                         success
-                        onPress={() => {
-                          ToastAndroid.show(
-                            'Botão "Processar" foi clicado',
-                            ToastAndroid.SHORT,
-                          );
-                        }}
+                        onPress={processCutting}
                         style={styles.button}>
                         <Text>Processar</Text>
                       </Button>
                     </Col>
                   </Row>
                 </Col>
-              </Row>
-              <Row>
-                <Col />
               </Row>
             </Grid>
           </Container>
@@ -133,9 +144,13 @@ const App: () => React$Node = () => {
 const styles = StyleSheet.create({
   button: {
     marginHorizontal: 24,
+    // position: 'absolute',
+    top: -200,
   },
   searchButton: {
-    height: 300,
+    // position: 'absolute',
+    // right: 100,
+    top: 200,
   },
   mainCol: {
     backgroundColor: '#f5f5f5',
