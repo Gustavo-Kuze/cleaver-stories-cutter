@@ -5384,6 +5384,11 @@ react-native-easy-grid@0.2.2:
   dependencies:
     lodash "^4.17.15"
 
+react-native-file-picker@^0.0.19:
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/react-native-file-picker/-/react-native-file-picker-0.0.19.tgz#55cb357fae43f2daa870aa8aab201d48e147ded8"
+  integrity sha512-/dMCtJR8327DUHo2v+qtSVdPL5vwN+D8004+4A6+c6U/Ira7nbjKL7zlVRCOyJ/Sl0UON/HDlPZeVQ4xnBbtcQ==
+
 react-native-iphone-x-helper@^1.0.3:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/react-native-iphone-x-helper/-/react-native-iphone-x-helper-1.2.1.tgz#645e2ffbbb49e80844bb4cbbe34a126fda1e6772"

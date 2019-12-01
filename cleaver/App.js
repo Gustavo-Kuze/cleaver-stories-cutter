@@ -6,12 +6,11 @@
  * @flow
  */
 
-import React from 'react';
+import React, {useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
-  View,
   StatusBar,
   Dimensions,
   ToastAndroid,
@@ -27,13 +26,30 @@ import {
   Text,
   Icon,
   Body,
-  Left,
-  Right,
   Title,
 } from 'native-base';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 
+import FilePicker from 'react-native-file-picker';
+
 const App: () => React$Node = () => {
+  const [filePath, setFilePath] = useState('');
+
+  const showFilePicker = () => {
+    FilePicker.showFilePicker(null, response => {
+      setFilePath(response.path);
+      ToastAndroid.show(response.path, ToastAndroid.SHORT);
+
+      if (response.didCancel) {
+        ToastAndroid.show('Cancelado', ToastAndroid.SHORT);
+      } else if (response.error) {
+        ToastAndroid.show(response.error, ToastAndroid.LONG);
+      } else {
+        // aqui da pra setar no state qual arquivo foi escolhido
+      }
+    });
+  };
+
   return (
     <>
       <StatusBar barStyle="dark-content" />
@@ -55,6 +71,7 @@ const App: () => React$Node = () => {
                           <Input
                             disabled
                             placeholder="Caminho do arquivo de vídeo"
+                            value={filePath}
                           />
                         </Item>
                       </Form>
@@ -63,12 +80,7 @@ const App: () => React$Node = () => {
                       <Button
                         rounded
                         info
-                        onPress={() => {
-                          ToastAndroid.show(
-                            'Apenas um teste',
-                            ToastAndroid.SHORT,
-                          );
-                        }}
+                        onPress={showFilePicker}
                         style={styles.button}>
                         <Icon type="FontAwesome" name="search" />
                       </Button>
