@@ -41,11 +41,19 @@ const App: () => React$Node = () => {
   const showFilePicker = () => {
     FilePicker.showFilePicker(null, response => {
       setFilePath(response.uri);
-      RNFFmpeg.getMediaInformation(response.uri)
+      const path = `file://${response.path}`;
+      RNFFmpeg.getMediaInformation(path)
         .then(info => {
           console.log('Result: ' + JSON.stringify(info));
         })
         .catch(err => console.error(err));
+
+      RNFFmpeg.execute(
+        ` -ss 00:00:00 -i ${path} -to 00:00:15 ${path}.output.mp4`,
+      ).then(result =>
+        console.log('FFmpeg process exited with rc ' + result.rc),
+      );
+
       ToastAndroid.show(response.path, ToastAndroid.SHORT);
 
       if (response.didCancel) {
