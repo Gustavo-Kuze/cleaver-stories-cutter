@@ -36,6 +36,8 @@ target 'cleaver' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'react-native-ffmpeg', :path => '../node_modules/react-native-ffmpeg'
+
   target 'cleaverTests' do
     inherit! :search_paths
     # Pods for testing

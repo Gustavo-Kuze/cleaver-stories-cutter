@@ -31,6 +31,7 @@ import {
 import {Col, Row, Grid} from 'react-native-easy-grid';
 
 import FilePicker from 'react-native-file-picker';
+import {RNFFmpeg} from 'react-native-ffmpeg';
 
 // video path storage/emulated/0/Download/video.mp4
 
@@ -40,6 +41,11 @@ const App: () => React$Node = () => {
   const showFilePicker = () => {
     FilePicker.showFilePicker(null, response => {
       setFilePath(response.uri);
+      RNFFmpeg.getMediaInformation(response.uri)
+        .then(info => {
+          console.log('Result: ' + JSON.stringify(info));
+        })
+        .catch(err => console.error(err));
       ToastAndroid.show(response.path, ToastAndroid.SHORT);
 
       if (response.didCancel) {

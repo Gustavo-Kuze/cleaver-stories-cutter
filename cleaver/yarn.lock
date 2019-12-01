@@ -5384,6 +5384,11 @@ react-native-easy-grid@0.2.2:
   dependencies:
     lodash "^4.17.15"
 
+react-native-ffmpeg@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/react-native-ffmpeg/-/react-native-ffmpeg-0.4.0.tgz#75bf061a189467c622aacc3b3e0669a2bc373f47"
+  integrity sha512-DRDXI5IkcPr7eZIpxwbCCuWPVmIHsO3k3yHSs9vojqFS1QRWokwRrQrkT49ZGQgo/PuUJOAlcZHhozA3i5D7nQ==
+
 react-native-file-picker@^0.0.19:
   version "0.0.19"
   resolved "https://registry.yarnpkg.com/react-native-file-picker/-/react-native-file-picker-0.0.19.tgz#55cb357fae43f2daa870aa8aab201d48e147ded8"
