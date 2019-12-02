@@ -60,6 +60,7 @@ const App: () => React$Node = () => {
         'Você ainda não escolheu um arquivo!',
         ToastAndroid.SHORT,
       );
+      return;
     }
     cut(
       filePath,

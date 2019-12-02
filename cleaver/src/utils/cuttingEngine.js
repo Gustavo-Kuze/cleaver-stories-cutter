@@ -2,7 +2,13 @@ import {RNFFmpeg} from 'react-native-ffmpeg';
 
 let intervalRef = null;
 
-const cut = (
+const getHowManySlices = async (filePath, seconds = 15) => {
+  const mediaInformation = await RNFFmpeg.getMediaInformation(filePath);
+  const totalSeconds = mediaInformation.duration / 1000;
+  return Math.floor(totalSeconds / seconds) + 1;
+};
+
+const cut = async (
   filePath,
   start = '00',
   end = '15',
@@ -10,18 +16,6 @@ const cut = (
   finishedCallback,
 ) => {
   RNFFmpeg.resetStatistics();
-  RNFFmpeg.getMediaInformation(filePath)
-    .then(info => {
-      console.log('Result: ' + JSON.stringify(info));
-      console.log('Duration: ' + info.duration);
-      /**
-       * fazendo info.duration / 1000, temos a duração do vídeo em segundos.
-       */
-    })
-    .catch(err => {
-      clearInterval(intervalRef);
-      throw new Error(err);
-    });
 
   RNFFmpeg.execute(
     ` -ss ${start} -i ${filePath} -t ${end} ${filePath}.output.mp4`,
