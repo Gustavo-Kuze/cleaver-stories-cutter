@@ -31,7 +31,7 @@ import {
 import {Col, Row, Grid} from 'react-native-easy-grid';
 
 import FilePicker from 'react-native-file-picker';
-import {RNFFmpeg} from 'react-native-ffmpeg';
+import {cut, cancel} from './src/utils/cuttingEngine';
 
 // video path storage/emulated/0/Download/video.mp4
 
@@ -61,20 +61,13 @@ const App: () => React$Node = () => {
         ToastAndroid.SHORT,
       );
     }
-
-    RNFFmpeg.getMediaInformation(filePath)
-      .then(info => {
-        console.log('Result: ' + JSON.stringify(info));
-      })
-      .catch(err => console.error(err));
-
-    RNFFmpeg.execute(
-      ` -ss 00:00:00 -i ${filePath} -to 00:00:15 ${filePath}.output.mp4`,
-    ).then(result => console.log('FFmpeg process exited with rc ' + result.rc));
-  };
-
-  const cancelCutting = () => {
-    RNFFmpeg.cancel();
+    cut(
+      filePath,
+      '00',
+      '15',
+      status => console.log(status.size),
+      () => console.log('ACABOU!!'),
+    );
   };
 
   return (
@@ -117,7 +110,7 @@ const App: () => React$Node = () => {
                       <Button
                         danger
                         bordered
-                        onPress={cancelCutting}
+                        onPress={() => console.log(cancel())}
                         style={styles.button}>
                         <Text>Cancelar</Text>
                       </Button>
@@ -144,12 +137,9 @@ const App: () => React$Node = () => {
 const styles = StyleSheet.create({
   button: {
     marginHorizontal: 24,
-    // position: 'absolute',
     top: -200,
   },
   searchButton: {
-    // position: 'absolute',
-    // right: 100,
     top: 200,
   },
   mainCol: {
