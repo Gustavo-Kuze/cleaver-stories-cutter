@@ -63,6 +63,8 @@ const App: () => React$Node = () => {
       return;
     }
     await cutRepeatedly(filePath, status => console.log(status));
+
+    ToastAndroid.show('O vídeo foi fatiado com sucesso!', ToastAndroid.LONG);
   };
 
   return (

@@ -34,7 +34,9 @@ const cutRepeatedly = async (filePath, statusCallback, seconds = 15) => {
 const cut = async (filePath, outputFileName, start, end, statusCallback) => {
   return new Promise((res, rej) => {
     RNFFmpeg.resetStatistics();
-    RNFFmpeg.execute(` -ss ${start} -i ${filePath} -t ${end} ${outputFileName}`)
+    RNFFmpeg.execute(
+      ` -ss ${start} -i ${filePath} -t ${end} -c copy ${outputFileName}`,
+    )
       .then(() => {
         clearInterval(intervalRef);
         console.log('execution finished');
@@ -51,7 +53,7 @@ const cut = async (filePath, outputFileName, start, end, statusCallback) => {
         return;
       }
       statusCallback(status);
-    }, 30);
+    }, 5);
   });
 };
 
