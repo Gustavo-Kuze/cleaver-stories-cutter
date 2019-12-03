@@ -27,6 +27,7 @@ import {
   Icon,
   Body,
   Title,
+  Spinner,
 } from 'native-base';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 
@@ -37,6 +38,9 @@ import {cutRepeatedly, cancel} from './src/utils/cuttingEngine';
 
 const App: () => React$Node = () => {
   const [filePath, setFilePath] = useState('');
+  const [progressStatus, setProgressStatus] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [isProcessStarted, setIsProcessStarted] = useState(false);
 
   const showFilePicker = () => {
     FilePicker.showFilePicker(null, response => {
@@ -62,9 +66,22 @@ const App: () => React$Node = () => {
       );
       return;
     }
-    await cutRepeatedly(filePath, status => console.log(status));
+    setLoading(true);
+    setIsProcessStarted(true);
+    await cutRepeatedly(filePath, status => {
+      setProgressStatus(status.message);
+    });
 
+    setLoading(false);
     ToastAndroid.show('O vídeo foi fatiado com sucesso!', ToastAndroid.LONG);
+    callCancel();
+  };
+
+  const callCancel = () => {
+    setLoading(false);
+    setIsProcessStarted(false);
+    setProgressStatus('');
+    cancel();
   };
 
   return (
@@ -75,7 +92,7 @@ const App: () => React$Node = () => {
           <Container>
             <Header>
               <Body>
-                <Title>Cleaver</Title>
+                <Title>Cleaver para Instagram</Title>
               </Body>
             </Header>
             <Grid>
@@ -104,16 +121,18 @@ const App: () => React$Node = () => {
                     </Col>
                   </Row>
                   <Row>
-                    <Col>
-                      <Button
-                        danger
-                        bordered
-                        block
-                        onPress={() => console.log(cancel())}
-                        style={styles.button}>
-                        <Text>Cancelar</Text>
-                      </Button>
-                    </Col>
+                    {isProcessStarted && (
+                      <Col>
+                        <Button
+                          danger
+                          bordered
+                          block
+                          onPress={callCancel}
+                          style={styles.button}>
+                          <Text>Cancelar</Text>
+                        </Button>
+                      </Col>
+                    )}
                     <Col>
                       <Button
                         success
@@ -122,6 +141,16 @@ const App: () => React$Node = () => {
                         style={styles.button}>
                         <Text>Processar</Text>
                       </Button>
+                    </Col>
+                  </Row>
+                  <Row style={styles.progressRow}>
+                    <Col>
+                      {loading && <Spinner color="green" />}
+                      {isProcessStarted && (
+                        <Text style={styles.progressLabel}>
+                          {progressStatus}
+                        </Text>
+                      )}
                     </Col>
                   </Row>
                 </Col>
@@ -137,7 +166,7 @@ const App: () => React$Node = () => {
 const styles = StyleSheet.create({
   button: {
     marginHorizontal: 6,
-    top: -200,
+    top: -90,
   },
   searchButton: {
     // top: 200,
@@ -146,6 +175,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#f5f5f5',
     height: Dimensions.get('screen').height,
     paddingHorizontal: 6,
+  },
+  progressRow: {
+    top: -150,
+  },
+  progressLabel: {
+    textAlign: 'center',
   },
 });
 

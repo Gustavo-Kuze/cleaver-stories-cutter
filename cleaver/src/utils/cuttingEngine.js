@@ -23,12 +23,16 @@ const cutRepeatedly = async (filePath, statusCallback, seconds = 15) => {
       `${end}`,
       status => {},
     );
-    console.log('start: ' + start);
-    console.log('end: ' + end);
-    statusCallback('Finalizou: ' + i);
+    statusCallback({
+      message: `Concluído ${i} de ${repeatCount}...`,
+      progress: {completed: i, total: repeatCount},
+    });
     start += seconds;
     end += seconds;
   }
+  statusCallback({
+    message: 'Tudo pronto!',
+  });
 };
 
 const cut = async (filePath, outputFileName, start, end, statusCallback) => {
