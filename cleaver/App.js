@@ -31,7 +31,7 @@ import {
 import {Col, Row, Grid} from 'react-native-easy-grid';
 
 import FilePicker from 'react-native-file-picker';
-import {cut, cancel} from './src/utils/cuttingEngine';
+import {cutRepeatedly, cancel} from './src/utils/cuttingEngine';
 
 // video path storage/emulated/0/Download/video.mp4
 
@@ -54,7 +54,7 @@ const App: () => React$Node = () => {
     });
   };
 
-  const processCutting = () => {
+  const processCutting = async () => {
     if (!filePath) {
       ToastAndroid.show(
         'Você ainda não escolheu um arquivo!',
@@ -62,13 +62,7 @@ const App: () => React$Node = () => {
       );
       return;
     }
-    cut(
-      filePath,
-      '00',
-      '15',
-      status => console.log(status.size),
-      () => console.log('ACABOU!!'),
-    );
+    await cutRepeatedly(filePath, status => console.log(status));
   };
 
   return (
@@ -86,7 +80,7 @@ const App: () => React$Node = () => {
               <Row>
                 <Col style={styles.mainCol}>
                   <Row style={{marginTop: 50}}>
-                    <Col size={10}>
+                    <Col size={8}>
                       <Form>
                         <Item>
                           <Input
@@ -96,12 +90,13 @@ const App: () => React$Node = () => {
                         </Item>
                       </Form>
                     </Col>
-                    <Col size={4} style={styles.searchButton}>
+                    <Col size={2} style={styles.searchButton}>
                       <Button
                         rounded
                         info
                         onPress={showFilePicker}
-                        style={styles.button}>
+                        block
+                        style={styles.searchButton}>
                         <Icon type="FontAwesome" name="search" />
                       </Button>
                     </Col>
@@ -111,6 +106,7 @@ const App: () => React$Node = () => {
                       <Button
                         danger
                         bordered
+                        block
                         onPress={() => console.log(cancel())}
                         style={styles.button}>
                         <Text>Cancelar</Text>
@@ -119,6 +115,7 @@ const App: () => React$Node = () => {
                     <Col>
                       <Button
                         success
+                        block
                         onPress={processCutting}
                         style={styles.button}>
                         <Text>Processar</Text>
@@ -137,15 +134,16 @@ const App: () => React$Node = () => {
 
 const styles = StyleSheet.create({
   button: {
-    marginHorizontal: 24,
+    marginHorizontal: 6,
     top: -200,
   },
   searchButton: {
-    top: 200,
+    // top: 200,
   },
   mainCol: {
     backgroundColor: '#f5f5f5',
     height: Dimensions.get('screen').height,
+    paddingHorizontal: 6,
   },
 });
 

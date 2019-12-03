@@ -2,42 +2,57 @@ import {RNFFmpeg} from 'react-native-ffmpeg';
 
 let intervalRef = null;
 
-const getHowManySlices = async (filePath, seconds = 15) => {
+const getRepeatCount = async (filePath, seconds = 15) => {
   const mediaInformation = await RNFFmpeg.getMediaInformation(filePath);
   const totalSeconds = mediaInformation.duration / 1000;
-  return Math.floor(totalSeconds / seconds) + 1;
+  const slicesFloat = totalSeconds / seconds;
+  return (
+    Math.floor(slicesFloat) + (Math.floor(slicesFloat) < slicesFloat ? 1 : 0)
+  );
 };
 
-const cut = async (
-  filePath,
-  start = '00',
-  end = '15',
-  statusCallback,
-  finishedCallback,
-) => {
-  RNFFmpeg.resetStatistics();
+const cutRepeatedly = async (filePath, statusCallback, seconds = 15) => {
+  const repeatCount = await getRepeatCount(filePath, seconds);
+  let start = 0;
+  let end = seconds;
+  for (let i = 0; i < repeatCount; i += 1) {
+    await cut(
+      filePath,
+      `${filePath.replace('.mp4', '')}${i}.mp4`,
+      start < 10 ? `0${start}` : `${start}`,
+      `${end}`,
+      status => {},
+    );
+    console.log('start: ' + start);
+    console.log('end: ' + end);
+    statusCallback('Finalizou: ' + i);
+    start += seconds;
+    end += seconds;
+  }
+};
 
-  RNFFmpeg.execute(
-    ` -ss ${start} -i ${filePath} -t ${end} ${filePath}.output.mp4`,
-  )
-    .then(() => {
-      clearInterval(intervalRef);
-      console.log('execution finished');
-    })
-    .catch(err => {
-      clearInterval(intervalRef);
-      throw new Error(err);
-    });
-  //   RNFFmpeg.enableLogCallback(data => {}); // redirecionar logs do console para cá
-  intervalRef = setInterval(() => {
-    RNFFmpeg.getLastReceivedStatistics().then(status => {
+const cut = async (filePath, outputFileName, start, end, statusCallback) => {
+  return new Promise((res, rej) => {
+    RNFFmpeg.resetStatistics();
+    RNFFmpeg.execute(` -ss ${start} -i ${filePath} -t ${end} ${outputFileName}`)
+      .then(() => {
+        clearInterval(intervalRef);
+        console.log('execution finished');
+        res();
+      })
+      .catch(err => {
+        clearInterval(intervalRef);
+        return rej(new Error(err));
+      });
+    intervalRef = setInterval(async () => {
+      const status = await RNFFmpeg.getLastReceivedStatistics();
       if (status.time / 1000 >= end) {
         clearInterval(intervalRef);
-        finishedCallback();
+        return;
       }
       statusCallback(status);
-    });
-  }, 30);
+    }, 30);
+  });
 };
 
 const cancel = () => {
@@ -46,4 +61,4 @@ const cancel = () => {
   return 'Processo cancelado com sucesso!';
 };
 
-export {cut, cancel};
+export {cutRepeatedly, cancel};
