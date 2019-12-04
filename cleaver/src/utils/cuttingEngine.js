@@ -1,4 +1,5 @@
 import {RNFFmpeg} from 'react-native-ffmpeg';
+import moment from 'moment';
 
 let intervalRef = null;
 
@@ -13,22 +14,27 @@ const getRepeatCount = async (filePath, seconds = 15) => {
 
 const cutRepeatedly = async (filePath, statusCallback, seconds = 15) => {
   const repeatCount = await getRepeatCount(filePath, seconds);
-  let start = 0;
-  let end = seconds;
+
+  let mom = moment('01/05/1992', 'DD/MM/YYYY');
+  let start = mom.format('00:mm:ss');
+  mom = mom.add(seconds, 'seconds');
+  let end = mom.format('00:mm:ss');
+
   for (let i = 0; i < repeatCount; i += 1) {
     await cut(
       filePath,
       `${filePath.replace('.mp4', '')}${i}.mp4`,
-      start < 10 ? `0${start}` : `${start}`,
-      `${end}`,
+      start,
+      end,
       status => {},
     );
     statusCallback({
       message: `Concluído ${i} de ${repeatCount}...`,
       progress: {completed: i, total: repeatCount},
     });
-    start += seconds;
-    end += seconds;
+    start = mom.format('00:mm:ss');
+    mom = mom.add(seconds, 'seconds');
+    end = mom.format('00:mm:ss');
   }
   statusCallback({
     message: 'Tudo pronto!',
@@ -39,7 +45,7 @@ const cut = async (filePath, outputFileName, start, end, statusCallback) => {
   return new Promise((res, rej) => {
     RNFFmpeg.resetStatistics();
     RNFFmpeg.execute(
-      ` -ss ${start} -i ${filePath} -t ${end} -c copy ${outputFileName}`,
+      ` -ss ${start} -i ${filePath} -to ${end} -c copy ${outputFileName}`,
     )
       .then(() => {
         clearInterval(intervalRef);
