@@ -12,40 +12,43 @@ const getRepeatCount = async (filePath, seconds = 15) => {
   );
 };
 
-const cutRepeatedly = async (filePath, statusCallback, seconds = 15) => {
+const cutRepeatedly = async (filePath, statusCallback, seconds = 14) => {
   const repeatCount = await getRepeatCount(filePath, seconds);
 
   let mom = moment('01/05/1992', 'DD/MM/YYYY');
   let start = mom.format('00:mm:ss');
-  mom = mom.add(seconds, 'seconds');
-  let end = mom.format('00:mm:ss');
 
   for (let i = 0; i < repeatCount; i += 1) {
     await cut(
       filePath,
       `${filePath.replace('.mp4', '')}${i}.mp4`,
       start,
-      end,
+      seconds,
       status => {},
     );
     statusCallback({
       message: `Concluído ${i} de ${repeatCount}...`,
       progress: {completed: i, total: repeatCount},
     });
-    start = mom.format('00:mm:ss');
     mom = mom.add(seconds, 'seconds');
-    end = mom.format('00:mm:ss');
+    start = mom.format('00:mm:ss');
   }
   statusCallback({
     message: 'Tudo pronto!',
   });
 };
 
-const cut = async (filePath, outputFileName, start, end, statusCallback) => {
+const cut = async (
+  filePath,
+  outputFileName,
+  start,
+  seconds,
+  statusCallback,
+) => {
   return new Promise((res, rej) => {
     RNFFmpeg.resetStatistics();
     RNFFmpeg.execute(
-      ` -ss ${start} -i ${filePath} -to ${end} -c copy ${outputFileName}`,
+      ` -ss ${start} -i ${filePath} -t ${seconds} -c copy ${outputFileName}`,
     )
       .then(() => {
         clearInterval(intervalRef);
@@ -58,7 +61,7 @@ const cut = async (filePath, outputFileName, start, end, statusCallback) => {
       });
     intervalRef = setInterval(async () => {
       const status = await RNFFmpeg.getLastReceivedStatistics();
-      if (status.time / 1000 >= end) {
+      if (status.time / 1000 >= seconds) {
         clearInterval(intervalRef);
         return;
       }
