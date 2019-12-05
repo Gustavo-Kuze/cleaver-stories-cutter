@@ -80,7 +80,7 @@ const Home: () => React$Node = () => {
     );
 
     setLoading(false);
-    ToastAndroid.show('O vídeo foi fatiado com sucesso!', ToastAndroid.LONG);
+    setIsProcessStarted(false);
   };
 
   const callCancel = () => {
@@ -178,11 +178,7 @@ const Home: () => React$Node = () => {
                   <Row style={styles.progressRow}>
                     <Col>
                       {loading && <Spinner color="green" />}
-                      {isProcessStarted && (
-                        <Text style={styles.progressLabel}>
-                          {progressStatus}
-                        </Text>
-                      )}
+                      <Text style={styles.progressLabel}>{progressStatus}</Text>
                     </Col>
                   </Row>
                 </Col>

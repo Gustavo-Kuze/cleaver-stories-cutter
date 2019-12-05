@@ -2,6 +2,7 @@ import {RNFFmpeg} from 'react-native-ffmpeg';
 import moment from 'moment';
 
 let intervalRef = null;
+let isCanceled = false;
 
 const getRepeatCount = async (filePath, seconds = 15) => {
   const mediaInformation = await RNFFmpeg.getMediaInformation(filePath);
@@ -18,29 +19,38 @@ const cutRepeatedly = async (
   seconds = 14,
   format = 'mp4',
 ) => {
+  isCanceled = false;
   const repeatCount = await getRepeatCount(filePath, seconds);
 
   let mom = moment('01/05/1992', 'DD/MM/YYYY');
   let start = mom.format('00:mm:ss');
 
   for (let i = 0; i < repeatCount; i += 1) {
-    await cut(
-      filePath,
-      `${filePath.replace(format, '')}${i}${format}`,
-      start,
-      seconds,
-      status => {},
-    );
-    statusCallback({
-      message: `Concluído ${i} de ${repeatCount}...`,
-      progress: {completed: i, total: repeatCount},
-    });
-    mom = mom.add(seconds, 'seconds');
-    start = mom.format('00:mm:ss');
+    if (!isCanceled) {
+      await cut(
+        filePath,
+        `${filePath.replace(format, '')}${i}${format}`,
+        start,
+        seconds,
+        status => {},
+      );
+      statusCallback({
+        message: `Progresso ${i} de ${repeatCount}...`,
+        progress: {completed: i, total: repeatCount},
+      });
+      mom = mom.add(seconds, 'seconds');
+      start = mom.format('00:mm:ss');
+    }
   }
-  statusCallback({
-    message: 'Tudo pronto!',
-  });
+  if (!isCanceled) {
+    statusCallback({
+      message: 'Vídeo fatiado com sucesso!',
+    });
+  } else {
+    statusCallback({
+      message: 'Processo cancelado',
+    });
+  }
 };
 
 const cut = async (
@@ -76,6 +86,7 @@ const cut = async (
 };
 
 const cancel = () => {
+  isCanceled = true;
   RNFFmpeg.cancel();
   clearInterval(intervalRef);
   return 'Processo cancelado com sucesso!';
