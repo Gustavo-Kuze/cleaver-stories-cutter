@@ -32,11 +32,11 @@ import {
 import {Col, Row, Grid} from 'react-native-easy-grid';
 
 import FilePicker from 'react-native-file-picker';
-import {cutRepeatedly, cancel} from './src/utils/cuttingEngine';
+import {cutRepeatedly, cancel} from '../utils/cuttingEngine';
 
 // video path storage/emulated/0/Download/video.mp4
 
-const App: () => React$Node = () => {
+const Home: () => React$Node = () => {
   const [filePath, setFilePath] = useState('');
   const [progressStatus, setProgressStatus] = useState('');
   const [loading, setLoading] = useState(false);
@@ -184,4 +184,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default Home;
