@@ -12,7 +12,12 @@ const getRepeatCount = async (filePath, seconds = 15) => {
   );
 };
 
-const cutRepeatedly = async (filePath, statusCallback, seconds = 14) => {
+const cutRepeatedly = async (
+  filePath,
+  statusCallback,
+  seconds = 14,
+  format = 'mp4',
+) => {
   const repeatCount = await getRepeatCount(filePath, seconds);
 
   let mom = moment('01/05/1992', 'DD/MM/YYYY');
@@ -21,7 +26,7 @@ const cutRepeatedly = async (filePath, statusCallback, seconds = 14) => {
   for (let i = 0; i < repeatCount; i += 1) {
     await cut(
       filePath,
-      `${filePath.replace('.mp4', '')}${i}.mp4`,
+      `${filePath.replace(format, '')}${i}${format}`,
       start,
       seconds,
       status => {},

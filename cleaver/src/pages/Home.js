@@ -28,6 +28,7 @@ import {
   Body,
   Title,
   Spinner,
+  Picker,
 } from 'native-base';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 
@@ -41,6 +42,7 @@ const Home: () => React$Node = () => {
   const [progressStatus, setProgressStatus] = useState('');
   const [loading, setLoading] = useState(false);
   const [isProcessStarted, setIsProcessStarted] = useState(false);
+  const [selectedFormat, setSelectedFormat] = useState('.mp4');
 
   const showFilePicker = () => {
     FilePicker.showFilePicker(null, response => {
@@ -68,20 +70,24 @@ const Home: () => React$Node = () => {
     }
     setLoading(true);
     setIsProcessStarted(true);
-    await cutRepeatedly(filePath, status => {
-      setProgressStatus(status.message);
-    });
+    await cutRepeatedly(
+      filePath,
+      status => {
+        setProgressStatus(status.message);
+      },
+      14,
+      selectedFormat,
+    );
 
     setLoading(false);
     ToastAndroid.show('O vídeo foi fatiado com sucesso!', ToastAndroid.LONG);
-    callCancel();
   };
 
   const callCancel = () => {
+    ToastAndroid.show(cancel(), ToastAndroid.LONG);
     setLoading(false);
     setIsProcessStarted(false);
     setProgressStatus('');
-    cancel();
   };
 
   return (
@@ -98,7 +104,7 @@ const Home: () => React$Node = () => {
             <Grid>
               <Row>
                 <Col style={styles.mainCol}>
-                  <Row style={{marginTop: 50}}>
+                  <Row style={{marginTop: 26}}>
                     <Col size={8}>
                       <Form>
                         <Item>
@@ -107,6 +113,32 @@ const Home: () => React$Node = () => {
                             value={filePath}
                           />
                         </Item>
+                        <Text
+                          style={{
+                            marginTop: 15,
+                            marginLeft: 8,
+                            color: '#222',
+                          }}>
+                          Formato do vídeo
+                        </Text>
+                        <Picker
+                          mode="dropdown"
+                          iosHeader="Select your SIM"
+                          iosIcon={<Icon name="arrow-down" />}
+                          style={{
+                            width: Dimensions.get('screen').width,
+                          }}
+                          selectedValue={selectedFormat}
+                          onValueChange={e => {
+                            setSelectedFormat(e);
+                          }}>
+                          <Picker.Item label="MP4" value=".mp4" />
+                          <Picker.Item label="AVI" value=".avi" />
+                          <Picker.Item label="M4A" value=".m4a" />
+                          <Picker.Item label="WMV" value=".wmv" />
+                          <Picker.Item label="MOV" value=".mov" />
+                          <Picker.Item label="FLV" value=".flv" />
+                        </Picker>
                       </Form>
                     </Col>
                     <Col size={2} style={styles.searchButton}>
@@ -166,7 +198,7 @@ const Home: () => React$Node = () => {
 const styles = StyleSheet.create({
   button: {
     marginHorizontal: 6,
-    top: -90,
+    top: -60,
   },
   searchButton: {
     // top: 200,
