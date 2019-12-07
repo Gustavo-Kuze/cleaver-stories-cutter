@@ -77,7 +77,7 @@ const Home: () => React$Node = () => {
       status => {
         setProgressStatus(status.message);
       },
-      14,
+      seconds,
       selectedFormat,
       outputPath,
     );
@@ -123,13 +123,6 @@ const Home: () => React$Node = () => {
                             onChangeText={text => setOutputPath(text)}
                           />
                         </Item>
-                        <Item>
-                          <Input
-                            placeholder="Diretório de saída"
-                            value={outputPath}
-                            onChangeText={text => setOutputPath(text)}
-                          />
-                        </Item>
                         <Text style={styles.formLabel}>Formato do vídeo</Text>
                         <Picker
                           mode="dropdown"
@@ -155,10 +148,7 @@ const Home: () => React$Node = () => {
                         <Row>
                           <Col size={6}>
                             <Slider
-                              style={{
-                                width: Dimensions.get('screen').width / 2,
-                                height: 40,
-                              }}
+                              style={styles.slider}
                               minimumValue={1}
                               maximumValue={15}
                               step={1}
@@ -257,10 +247,14 @@ const styles = StyleSheet.create({
     color: '#222',
   },
   topRow: {marginTop: 26},
-  startStopButtonsRow: {marginTop: 260},
+  startStopButtonsRow: {marginTop: 200},
   seconds: {
     textAlign: 'center',
-    marginTop: 7,
+    marginTop: 8,
+  },
+  slider: {
+    width: Dimensions.get('screen').width / 2,
+    height: 40,
   },
 });
 
