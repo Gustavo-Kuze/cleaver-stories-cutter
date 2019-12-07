@@ -16,7 +16,7 @@ import {
   ToastAndroid,
   Clipboard,
 } from 'react-native';
-
+import Slider from '@react-native-community/slider';
 import {
   Container,
   Header,
@@ -44,6 +44,7 @@ const Home: () => React$Node = () => {
   const [loading, setLoading] = useState(false);
   const [isProcessStarted, setIsProcessStarted] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState('.mp4');
+  const [seconds, setSeconds] = useState(15);
 
   const showFilePicker = () => {
     FilePicker.showFilePicker(null, response => {
@@ -122,6 +123,13 @@ const Home: () => React$Node = () => {
                             onChangeText={text => setOutputPath(text)}
                           />
                         </Item>
+                        <Item>
+                          <Input
+                            placeholder="Diretório de saída"
+                            value={outputPath}
+                            onChangeText={text => setOutputPath(text)}
+                          />
+                        </Item>
                         <Text style={styles.formLabel}>Formato do vídeo</Text>
                         <Picker
                           mode="dropdown"
@@ -141,6 +149,28 @@ const Home: () => React$Node = () => {
                           <Picker.Item label="MOV" value=".mov" />
                           <Picker.Item label="FLV" value=".flv" />
                         </Picker>
+                        <Text style={styles.formLabel}>
+                          Tamanho final (em segundos)
+                        </Text>
+                        <Row>
+                          <Col size={6}>
+                            <Slider
+                              style={{
+                                width: Dimensions.get('screen').width / 2,
+                                height: 40,
+                              }}
+                              minimumValue={1}
+                              maximumValue={15}
+                              step={1}
+                              minimumTrackTintColor="#00796b"
+                              maximumTrackTintColor="#000000"
+                              onValueChange={secs => setSeconds(secs)}
+                            />
+                          </Col>
+                          <Col size={6}>
+                            <Text style={styles.seconds}>{seconds}s</Text>
+                          </Col>
+                        </Row>
                       </Form>
                     </Col>
                     <Col size={2}>
@@ -216,18 +246,22 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
   },
   progressRow: {
-    top: -150,
+    top: -130,
   },
   progressLabel: {
     textAlign: 'center',
   },
   formLabel: {
-    marginTop: 15,
+    marginTop: 10,
     marginLeft: 8,
     color: '#222',
   },
   topRow: {marginTop: 26},
-  startStopButtonsRow: {marginTop: 150},
+  startStopButtonsRow: {marginTop: 260},
+  seconds: {
+    textAlign: 'center',
+    marginTop: 7,
+  },
 });
 
 export default Home;

@@ -11,6 +11,7 @@
     "release": "cd android && gradlew assembleRelease"
   },
   "dependencies": {
+    "@react-native-community/slider": "^2.0.7",
     "moment": "^2.24.0",
     "native-base": "^2.13.8",
     "react": "16.9.0",
