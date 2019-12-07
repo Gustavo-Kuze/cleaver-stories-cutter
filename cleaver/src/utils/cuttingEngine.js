@@ -13,11 +13,17 @@ const getRepeatCount = async (filePath, seconds = 15) => {
   );
 };
 
-const cutRepeatedly = async (
+const getFileNameFromPath = path => {
+  const splited = path.split('/');
+  return splited[splited.length - 1];
+};
+
+const sliceVideo = async (
   filePath,
   statusCallback,
   seconds = 14,
   format = 'mp4',
+  outputDirectory = '',
 ) => {
   isCanceled = false;
   const repeatCount = await getRepeatCount(filePath, seconds);
@@ -29,7 +35,12 @@ const cutRepeatedly = async (
     if (!isCanceled) {
       await cut(
         filePath,
-        `${filePath.replace(format, '')}${i}${format}`,
+        outputDirectory
+          ? `"file://${outputDirectory}/${getFileNameFromPath(filePath).replace(
+              format,
+              '',
+            )}${i}${format}"`
+          : `${filePath.replace(format, '')}${i}${format}`,
         start,
         seconds,
         status => {},
@@ -92,4 +103,4 @@ const cancel = () => {
   return 'Processo cancelado com sucesso!';
 };
 
-export {cutRepeatedly, cancel};
+export {sliceVideo, cancel};

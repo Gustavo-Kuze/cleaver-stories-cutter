@@ -33,7 +33,7 @@ import {
 } from 'native-base';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import FilePicker from 'react-native-file-picker';
-import {cutRepeatedly, cancel} from '../utils/cuttingEngine';
+import {sliceVideo, cancel} from '../utils/cuttingEngine';
 
 // video path storage/emulated/0/Download/video.mp4
 
@@ -61,7 +61,7 @@ const Home: () => React$Node = () => {
     });
   };
 
-  const processCutting = async () => {
+  const startCutting = async () => {
     if (!filePath) {
       ToastAndroid.show(
         'Você ainda não escolheu um arquivo!',
@@ -71,13 +71,14 @@ const Home: () => React$Node = () => {
     }
     setLoading(true);
     setIsProcessStarted(true);
-    await cutRepeatedly(
+    await sliceVideo(
       filePath,
       status => {
         setProgressStatus(status.message);
       },
       14,
       selectedFormat,
+      outputPath,
     );
 
     setLoading(false);
@@ -112,7 +113,6 @@ const Home: () => React$Node = () => {
                           <Input
                             placeholder="Caminho do arquivo de vídeo"
                             value={filePath}
-                            disabled
                           />
                         </Item>
                         <Item>
@@ -183,7 +183,7 @@ const Home: () => React$Node = () => {
                       <Button
                         success
                         block
-                        onPress={processCutting}
+                        onPress={startCutting}
                         style={styles.button}>
                         <Text>Processar</Text>
                       </Button>
