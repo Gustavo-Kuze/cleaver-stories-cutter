@@ -31,7 +31,6 @@ import {
   Picker,
 } from 'native-base';
 import {Col, Row, Grid} from 'react-native-easy-grid';
-
 import FilePicker from 'react-native-file-picker';
 import {cutRepeatedly, cancel} from '../utils/cuttingEngine';
 
@@ -39,6 +38,7 @@ import {cutRepeatedly, cancel} from '../utils/cuttingEngine';
 
 const Home: () => React$Node = () => {
   const [filePath, setFilePath] = useState('');
+  const [outputPath, setOutputPath] = useState('');
   const [progressStatus, setProgressStatus] = useState('');
   const [loading, setLoading] = useState(false);
   const [isProcessStarted, setIsProcessStarted] = useState(false);
@@ -104,23 +104,23 @@ const Home: () => React$Node = () => {
             <Grid>
               <Row>
                 <Col style={styles.mainCol}>
-                  <Row style={{marginTop: 26}}>
+                  <Row style={styles.topRow}>
                     <Col size={8}>
                       <Form>
                         <Item>
                           <Input
                             placeholder="Caminho do arquivo de vídeo"
                             value={filePath}
+                            disabled
                           />
                         </Item>
-                        <Text
-                          style={{
-                            marginTop: 15,
-                            marginLeft: 8,
-                            color: '#222',
-                          }}>
-                          Formato do vídeo
-                        </Text>
+                        <Item>
+                          <Input
+                            placeholder="Diretório de saída"
+                            value={outputPath}
+                          />
+                        </Item>
+                        <Text style={styles.formLabel}>Formato do vídeo</Text>
                         <Picker
                           mode="dropdown"
                           iosHeader="Select your SIM"
@@ -141,14 +141,24 @@ const Home: () => React$Node = () => {
                         </Picker>
                       </Form>
                     </Col>
-                    <Col size={2} style={styles.searchButton}>
+                    <Col size={2}>
                       <Button
                         rounded
                         info
                         onPress={showFilePicker}
                         block
-                        style={styles.searchButton}>
+                        style={{marginTop: 6}}>
                         <Icon type="FontAwesome" name="search" />
+                      </Button>
+                      <Button
+                        rounded
+                        info
+                        onPress={() => {}}
+                        block
+                        style={{marginTop: 10}}
+                        warning
+                        bordered>
+                        <Icon type="FontAwesome" name="paste" />
                       </Button>
                     </Col>
                   </Row>
@@ -196,9 +206,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 6,
     top: -60,
   },
-  searchButton: {
-    // top: 200,
-  },
   mainCol: {
     backgroundColor: '#f5f5f5',
     height: Dimensions.get('screen').height,
@@ -210,6 +217,12 @@ const styles = StyleSheet.create({
   progressLabel: {
     textAlign: 'center',
   },
+  formLabel: {
+    marginTop: 15,
+    marginLeft: 8,
+    color: '#222',
+  },
+  topRow: {marginTop: 26},
 });
 
 export default Home;
