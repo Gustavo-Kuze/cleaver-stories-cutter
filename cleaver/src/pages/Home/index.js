@@ -7,9 +7,9 @@
  */
 
 import React, {useState} from 'react';
+import styles from './styles';
 import {
   SafeAreaView,
-  StyleSheet,
   ScrollView,
   StatusBar,
   Dimensions,
@@ -33,7 +33,7 @@ import {
 } from 'native-base';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import FilePicker from 'react-native-file-picker';
-import {sliceVideo, cancel} from '../utils/cuttingEngine';
+import {sliceVideo, cancel} from '../../utils/cuttingEngine';
 
 // video path storage/emulated/0/Download/video.mp4
 
@@ -220,38 +220,5 @@ const Home: () => React$Node = () => {
     </>
   );
 };
-
-const styles = StyleSheet.create({
-  button: {
-    marginHorizontal: 6,
-    top: -60,
-  },
-  mainCol: {
-    backgroundColor: '#f5f5f5',
-    height: Dimensions.get('screen').height,
-    paddingHorizontal: 6,
-  },
-  progressRow: {
-    top: -130,
-  },
-  progressLabel: {
-    textAlign: 'center',
-  },
-  formLabel: {
-    marginTop: 10,
-    marginLeft: 8,
-    color: '#222',
-  },
-  topRow: {marginTop: 26},
-  startStopButtonsRow: {marginTop: 200},
-  seconds: {
-    textAlign: 'center',
-    marginTop: 8,
-  },
-  slider: {
-    width: Dimensions.get('screen').width / 2,
-    height: 40,
-  },
-});
 
 export default Home;
