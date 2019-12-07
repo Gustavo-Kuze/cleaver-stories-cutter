@@ -14,6 +14,7 @@ import {
   StatusBar,
   Dimensions,
   ToastAndroid,
+  Clipboard,
 } from 'react-native';
 
 import {
@@ -118,6 +119,7 @@ const Home: () => React$Node = () => {
                           <Input
                             placeholder="Diretório de saída"
                             value={outputPath}
+                            onChangeText={text => setOutputPath(text)}
                           />
                         </Item>
                         <Text style={styles.formLabel}>Formato do vídeo</Text>
@@ -153,7 +155,9 @@ const Home: () => React$Node = () => {
                       <Button
                         rounded
                         info
-                        onPress={() => {}}
+                        onPress={async () => {
+                          setOutputPath(await Clipboard.getString());
+                        }}
                         block
                         style={{marginTop: 10}}
                         warning
