@@ -100,7 +100,7 @@ const Home: () => React$Node = () => {
           <Container>
             <Header>
               <Body>
-                <Title>Cleaver para Instagram</Title>
+                <Title>Cleaver para Stories</Title>
               </Body>
             </Header>
             <Grid>

@@ -1,5 +1,6 @@
 import {RNFFmpeg} from 'react-native-ffmpeg';
 import moment from 'moment';
+import {ToastAndroid} from 'react-native';
 
 let intervalRef = null;
 let isCanceled = false;
@@ -73,12 +74,17 @@ const cut = async (
 ) => {
   return new Promise((res, rej) => {
     RNFFmpeg.resetStatistics();
+    RNFFmpeg.enableLogCallback(log => {
+      if (log.log.includes('Conversion failed')) {
+        ToastAndroid.show('Erro ao cortar o arquivo', ToastAndroid.LONG);
+        cancel();
+      }
+    });
     RNFFmpeg.execute(
       ` -ss ${start} -i ${filePath} -t ${seconds} -c copy ${outputFileName}`,
     )
       .then(() => {
         clearInterval(intervalRef);
-        console.log('execution finished');
         res();
       })
       .catch(err => {
@@ -100,7 +106,7 @@ const cancel = () => {
   isCanceled = true;
   RNFFmpeg.cancel();
   clearInterval(intervalRef);
-  return 'Processo cancelado com sucesso!';
+  return 'Processo cancelado pelo usuário!';
 };
 
 export {sliceVideo, cancel};
