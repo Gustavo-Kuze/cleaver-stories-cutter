@@ -142,9 +142,7 @@ const Home: () => React$Node = () => {
                           <Picker.Item label="MOV" value=".mov" />
                           <Picker.Item label="FLV" value=".flv" />
                         </Picker>
-                        <Text style={styles.formLabel}>
-                          Tamanho final (em segundos)
-                        </Text>
+                        <Text style={styles.formLabel}>Tamanho dos vídeos</Text>
                         <Row>
                           <Col size={6}>
                             <Slider
@@ -173,15 +171,13 @@ const Home: () => React$Node = () => {
                         <Icon type="FontAwesome" name="search" />
                       </Button>
                       <Button
-                        rounded
-                        info
+                        light
                         onPress={async () => {
                           setOutputPath(await Clipboard.getString());
                         }}
                         block
                         style={{marginTop: 10}}
-                        warning
-                        bordered>
+                        rounded>
                         <Icon type="FontAwesome" name="paste" />
                       </Button>
                     </Col>
