@@ -162,7 +162,7 @@ const Home: () => React$Node = () => {
                       </Button>
                     </Col>
                   </Row>
-                  <Row>
+                  <Row style={styles.startStopButtonsRow}>
                     {isProcessStarted && (
                       <Col>
                         <Button
@@ -223,6 +223,7 @@ const styles = StyleSheet.create({
     color: '#222',
   },
   topRow: {marginTop: 26},
+  startStopButtonsRow: {marginTop: 150},
 });
 
 export default Home;
