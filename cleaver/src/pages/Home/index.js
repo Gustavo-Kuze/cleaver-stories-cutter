@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -6,7 +7,7 @@
  * @flow
  */
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import styles from './styles';
 import {
   SafeAreaView,
@@ -33,7 +34,8 @@ import {
 } from 'native-base';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import FilePicker from 'react-native-file-picker';
-import {sliceVideo, cancel} from '../../utils/cuttingEngine';
+import {sliceVideo, cancel} from '../../services/cuttingEngine';
+import {saveSettings, loadSetting} from '../../services/settings';
 
 // video path storage/emulated/0/Download/video.mp4
 
@@ -45,6 +47,23 @@ const Home: () => React$Node = () => {
   const [isProcessStarted, setIsProcessStarted] = useState(false);
   const [selectedFormat, setSelectedFormat] = useState('.mp4');
   const [seconds, setSeconds] = useState(15);
+
+  const loadSettings = async () => {
+    const filePathSaved = await loadSetting('filePath');
+    const outputPathSaved = await loadSetting('outputPath');
+    const selectedFormatSaved = await loadSetting('selectedFormat');
+    const secondsSaved = await loadSetting('seconds');
+    setFilePath(filePathSaved || '');
+    setOutputPath(outputPathSaved || '');
+    setSeconds(secondsSaved || 15);
+    if (selectedFormatSaved) {
+      setSelectedFormat(selectedFormatSaved);
+    }
+  };
+
+  useEffect(() => {
+    loadSettings();
+  }, []);
 
   const showFilePicker = () => {
     FilePicker.showFilePicker(null, response => {
@@ -62,7 +81,17 @@ const Home: () => React$Node = () => {
     });
   };
 
+  const saveCurrentSettings = () => {
+    saveSettings({
+      filePath,
+      outputPath,
+      selectedFormat,
+      seconds,
+    });
+  };
+
   const startCutting = async () => {
+    saveCurrentSettings();
     if (!filePath) {
       ToastAndroid.show(
         'Você ainda não escolheu um arquivo!',
