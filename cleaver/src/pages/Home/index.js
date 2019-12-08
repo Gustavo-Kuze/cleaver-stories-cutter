@@ -31,6 +31,7 @@ import {
   Title,
   Spinner,
   Picker,
+  Content,
 } from 'native-base';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import FilePicker from 'react-native-file-picker';
@@ -133,116 +134,123 @@ const Home: () => React$Node = () => {
                 <Title>Cleaver para Stories</Title>
               </Body>
             </Header>
-            <Grid>
-              <Row>
-                <Col style={styles.mainCol}>
-                  <Row style={styles.topRow}>
-                    <Col size={8}>
-                      <Form>
-                        <Item>
-                          <Input
-                            placeholder="Caminho do arquivo de vídeo"
-                            value={filePath}
-                          />
-                        </Item>
-                        <Item>
-                          <Input
-                            placeholder="Diretório de saída"
-                            value={outputPath}
-                            onChangeText={text => setOutputPath(text)}
-                          />
-                        </Item>
-                        <Text style={styles.formLabel}>Formato do vídeo</Text>
-                        <Picker
-                          mode="dropdown"
-                          iosHeader="Select your SIM"
-                          iosIcon={<Icon name="arrow-down" />}
-                          style={{
-                            width: Dimensions.get('screen').width,
-                          }}
-                          selectedValue={selectedFormat}
-                          onValueChange={e => {
-                            setSelectedFormat(e);
-                          }}>
-                          <Picker.Item label="MP4" value=".mp4" />
-                          <Picker.Item label="AVI" value=".avi" />
-                          <Picker.Item label="M4A" value=".m4a" />
-                          <Picker.Item label="WMV" value=".wmv" />
-                          <Picker.Item label="MOV" value=".mov" />
-                          <Picker.Item label="FLV" value=".flv" />
-                        </Picker>
-                        <Text style={styles.formLabel}>Tamanho dos vídeos</Text>
-                        <Row>
-                          <Col size={6}>
-                            <Slider
-                              style={styles.slider}
-                              minimumValue={1}
-                              maximumValue={15}
-                              step={1}
-                              minimumTrackTintColor="#00796b"
-                              maximumTrackTintColor="#000000"
-                              onValueChange={secs => setSeconds(secs)}
+            <Content>
+              <Grid>
+                <Row>
+                  <Col style={styles.mainCol}>
+                    <Row style={styles.topRow}>
+                      <Col size={8}>
+                        <Form>
+                          <Item>
+                            <Input
+                              placeholder="Caminho do arquivo de vídeo"
+                              value={filePath}
                             />
-                          </Col>
-                          <Col size={6}>
-                            <Text style={styles.seconds}>{seconds}s</Text>
-                          </Col>
-                        </Row>
-                      </Form>
-                    </Col>
-                    <Col size={2}>
-                      <Button
-                        rounded
-                        info
-                        onPress={showFilePicker}
-                        block
-                        style={{marginTop: 6}}>
-                        <Icon type="FontAwesome" name="search" />
-                      </Button>
-                      <Button
-                        light
-                        onPress={async () => {
-                          setOutputPath(await Clipboard.getString());
-                        }}
-                        block
-                        style={{marginTop: 10}}
-                        rounded>
-                        <Icon type="FontAwesome" name="paste" />
-                      </Button>
-                    </Col>
-                  </Row>
-                  <Row style={styles.startStopButtonsRow}>
-                    {isProcessStarted && (
-                      <Col>
+                          </Item>
+                          <Item>
+                            <Input
+                              placeholder="Diretório de saída (opcional)"
+                              value={outputPath}
+                              onChangeText={text => setOutputPath(text)}
+                            />
+                          </Item>
+                          <Text style={styles.formLabel}>Formato do vídeo</Text>
+                          <Picker
+                            mode="dropdown"
+                            iosHeader="Select your SIM"
+                            iosIcon={<Icon name="arrow-down" />}
+                            style={{
+                              width: Dimensions.get('screen').width,
+                            }}
+                            selectedValue={selectedFormat}
+                            onValueChange={e => {
+                              setSelectedFormat(e);
+                            }}>
+                            <Picker.Item label="MP4" value=".mp4" />
+                            <Picker.Item label="AVI" value=".avi" />
+                            <Picker.Item label="M4A" value=".m4a" />
+                            <Picker.Item label="WMV" value=".wmv" />
+                            <Picker.Item label="MOV" value=".mov" />
+                            <Picker.Item label="FLV" value=".flv" />
+                          </Picker>
+                          <Text style={styles.formLabel}>
+                            Tamanho dos vídeos
+                          </Text>
+                          <Row>
+                            <Col size={6}>
+                              <Slider
+                                style={styles.slider}
+                                minimumValue={1}
+                                maximumValue={15}
+                                step={1}
+                                minimumTrackTintColor="#00796b"
+                                maximumTrackTintColor="#000000"
+                                onValueChange={secs => setSeconds(secs)}
+                                value={parseFloat(seconds)}
+                              />
+                            </Col>
+                            <Col size={6}>
+                              <Text style={styles.seconds}>{seconds}s</Text>
+                            </Col>
+                          </Row>
+                        </Form>
+                      </Col>
+                      <Col size={2}>
                         <Button
-                          danger
-                          bordered
+                          rounded
+                          info
+                          onPress={showFilePicker}
                           block
-                          onPress={callCancel}
-                          style={styles.button}>
-                          <Text>Cancelar</Text>
+                          style={{marginTop: 6}}>
+                          <Icon type="FontAwesome" name="search" />
+                        </Button>
+                        <Button
+                          light
+                          onPress={async () => {
+                            setOutputPath(await Clipboard.getString());
+                          }}
+                          block
+                          style={{marginTop: 10}}
+                          rounded>
+                          <Icon type="FontAwesome" name="paste" />
                         </Button>
                       </Col>
-                    )}
-                    <Col>
-                      <Button
-                        success
-                        block
-                        onPress={startCutting}
-                        style={styles.button}>
-                        <Text>Processar</Text>
-                      </Button>
-                    </Col>
-                  </Row>
-                  <Row style={styles.progressRow}>
-                    <Col>
-                      {loading && <Spinner color="green" />}
-                      <Text style={styles.progressLabel}>{progressStatus}</Text>
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-            </Grid>
+                    </Row>
+                    <Row style={styles.startStopButtonsRow}>
+                      {isProcessStarted && (
+                        <Col>
+                          <Button
+                            danger
+                            bordered
+                            block
+                            onPress={callCancel}
+                            style={styles.button}>
+                            <Text>Cancelar</Text>
+                          </Button>
+                        </Col>
+                      )}
+                      <Col>
+                        <Button
+                          success
+                          block
+                          onPress={startCutting}
+                          style={styles.button}>
+                          <Text>Iniciar</Text>
+                        </Button>
+                      </Col>
+                    </Row>
+                    <Row style={styles.progressRow}>
+                      <Col>
+                        {loading && <Spinner color="green" />}
+                        <Text style={styles.progressLabel}>
+                          {progressStatus}
+                        </Text>
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+              </Grid>
+            </Content>
           </Container>
         </ScrollView>
       </SafeAreaView>
