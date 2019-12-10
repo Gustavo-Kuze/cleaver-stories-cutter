@@ -4,14 +4,13 @@ import {ToastAndroid} from 'react-native';
 
 let intervalRef = null;
 let isCanceled = false;
+const defaultInitialDate = '01/05/1992';
 
 const getRepeatCount = async (filePath, seconds = 15) => {
   const mediaInformation = await RNFFmpeg.getMediaInformation(filePath);
   const totalSeconds = mediaInformation.duration / 1000;
   const slicesFloat = totalSeconds / seconds;
-  return (
-    Math.floor(slicesFloat) + (Math.floor(slicesFloat) < slicesFloat ? 1 : 0)
-  );
+  return Math.floor(slicesFloat);
 };
 
 const getFileNameFromPath = path => {
@@ -29,7 +28,7 @@ const sliceVideo = async (
   isCanceled = false;
   const repeatCount = await getRepeatCount(filePath, seconds);
 
-  let mom = moment('01/05/1992', 'DD/MM/YYYY');
+  let mom = moment(defaultInitialDate, 'DD/MM/YYYY');
   let start = mom.format('00:mm:ss');
 
   for (let i = 0; i < repeatCount; i += 1) {
@@ -47,10 +46,10 @@ const sliceVideo = async (
         status => {},
       );
       statusCallback({
-        message: `Progresso ${i} de ${repeatCount}...`,
+        message: `Progresso ${i} de ${repeatCount - 1}...`,
         progress: {completed: i, total: repeatCount},
       });
-      mom = mom.add(seconds, 'seconds');
+      mom = mom.add(parseInt(seconds, 10) + 1, 'seconds');
       start = mom.format('00:mm:ss');
     }
   }
