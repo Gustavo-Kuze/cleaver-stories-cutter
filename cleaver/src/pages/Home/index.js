@@ -125,13 +125,13 @@ const Home: () => React$Node = () => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" />
+      <StatusBar hidden />
       <SafeAreaView>
         <ScrollView contentInsetAdjustmentBehavior="automatic">
           <Container>
-            <Header>
+            <Header style={styles.header}>
               <Body>
-                <Title>Cleaver para Stories</Title>
+                <Title style={styles.title}>Cleaver para Stories</Title>
               </Body>
             </Header>
             <Content>
@@ -141,13 +141,13 @@ const Home: () => React$Node = () => {
                     <Row style={styles.topRow}>
                       <Col size={8}>
                         <Form>
-                          <Item>
+                          <Item style={styles.input}>
                             <Input
                               placeholder="Caminho do arquivo de vídeo"
                               value={filePath}
                             />
                           </Item>
-                          <Item>
+                          <Item style={styles.input}>
                             <Input
                               placeholder="Diretório de saída (opcional)"
                               value={outputPath}
@@ -159,9 +159,7 @@ const Home: () => React$Node = () => {
                             mode="dropdown"
                             iosHeader="Select your SIM"
                             iosIcon={<Icon name="arrow-down" />}
-                            style={{
-                              width: Dimensions.get('screen').width,
-                            }}
+                            style={styles.picker}
                             selectedValue={selectedFormat}
                             onValueChange={e => {
                               setSelectedFormat(e);
@@ -177,7 +175,7 @@ const Home: () => React$Node = () => {
                             Tamanho dos vídeos
                           </Text>
                           <Row>
-                            <Col size={6}>
+                            <Col size={12}>
                               <Slider
                                 style={styles.slider}
                                 minimumValue={1}
@@ -189,7 +187,9 @@ const Home: () => React$Node = () => {
                                 value={parseFloat(seconds)}
                               />
                             </Col>
-                            <Col size={6}>
+                          </Row>
+                          <Row>
+                            <Col size={12}>
                               <Text style={styles.seconds}>{seconds}s</Text>
                             </Col>
                           </Row>
@@ -201,7 +201,7 @@ const Home: () => React$Node = () => {
                           info
                           onPress={showFilePicker}
                           block
-                          style={{marginTop: 6}}>
+                          style={styles.searchButton}>
                           <Icon type="FontAwesome" name="search" />
                         </Button>
                         <Button
@@ -210,7 +210,7 @@ const Home: () => React$Node = () => {
                             setOutputPath(await Clipboard.getString());
                           }}
                           block
-                          style={{marginTop: 10}}
+                          style={styles.pasteButton}
                           rounded>
                           <Icon type="FontAwesome" name="paste" />
                         </Button>
@@ -241,7 +241,9 @@ const Home: () => React$Node = () => {
                     </Row>
                     <Row style={styles.progressRow}>
                       <Col>
-                        {loading && <Spinner color="green" />}
+                        {loading && (
+                          <Spinner color="green" style={styles.loader} />
+                        )}
                         <Text style={styles.progressLabel}>
                           {progressStatus}
                         </Text>
