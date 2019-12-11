@@ -15,9 +15,6 @@ const styles = StyleSheet.create({
   progressRow: {
     top: -130,
   },
-  picker: {
-    width: Dimensions.get('screen').width - 20,
-  },
   loader: {
     marginTop: -20,
   },

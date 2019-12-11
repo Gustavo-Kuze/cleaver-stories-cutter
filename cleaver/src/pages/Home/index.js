@@ -29,13 +29,13 @@ import {
   Body,
   Title,
   Spinner,
-  Picker,
   Content,
 } from 'native-base';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import FilePicker from 'react-native-file-picker';
 import {sliceVideo, cancel} from '../../services/cuttingEngine';
 import {saveSettings, loadSetting} from '../../services/settings';
+import VideoFormatsPicker from '../../components/VideoFormatsPicker';
 
 // video path storage/emulated/0/Download/video.mp4
 
@@ -154,22 +154,9 @@ const Home: () => React$Node = () => {
                             />
                           </Item>
                           <Text style={styles.formLabel}>Formato do vídeo</Text>
-                          <Picker
-                            mode="dropdown"
-                            iosHeader="Select your SIM"
-                            iosIcon={<Icon name="arrow-down" />}
-                            style={styles.picker}
-                            selectedValue={selectedFormat}
-                            onValueChange={e => {
-                              setSelectedFormat(e);
-                            }}>
-                            <Picker.Item label="MP4" value=".mp4" />
-                            <Picker.Item label="AVI" value=".avi" />
-                            <Picker.Item label="M4A" value=".m4a" />
-                            <Picker.Item label="WMV" value=".wmv" />
-                            <Picker.Item label="MOV" value=".mov" />
-                            <Picker.Item label="FLV" value=".flv" />
-                          </Picker>
+                          <VideoFormatsPicker
+                            onValueChange={format => setSelectedFormat(format)}
+                          />
                           <Text style={styles.formLabel}>
                             Tamanho dos vídeos
                           </Text>
