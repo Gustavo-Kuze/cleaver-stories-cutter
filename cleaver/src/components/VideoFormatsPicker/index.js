@@ -1,10 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Picker, Icon} from 'native-base';
 import styles from './styles';
 
-const VideoFormatsPicker = ({onValueChange}) => {
-  const [selectedFormat, setSelectedFormat] = useState('.mp4');
-
+const VideoFormatsPicker = ({onValueChange, selectedFormat}) => {
   return (
     <Picker
       mode="dropdown"
@@ -13,7 +11,6 @@ const VideoFormatsPicker = ({onValueChange}) => {
       style={styles.picker}
       selectedValue={selectedFormat}
       onValueChange={e => {
-        setSelectedFormat(e);
         onValueChange(e);
       }}>
       <Picker.Item label="MP4" value=".mp4" />

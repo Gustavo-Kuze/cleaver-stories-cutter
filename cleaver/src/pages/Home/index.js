@@ -1,3 +1,4 @@
+/* eslint-disable curly */
 /* eslint-disable react-hooks/exhaustive-deps */
 /**
  * Sample React Native App
@@ -32,10 +33,10 @@ import {
   Content,
 } from 'native-base';
 import {Col, Row, Grid} from 'react-native-easy-grid';
-import FilePicker from 'react-native-file-picker';
 import {sliceVideo, cancel} from '../../services/cuttingEngine';
 import {saveSettings, loadSetting} from '../../services/settings';
 import VideoFormatsPicker from '../../components/VideoFormatsPicker';
+import {showFilePicker} from '../../utils/fs';
 
 // video path storage/emulated/0/Download/video.mp4
 
@@ -65,20 +66,9 @@ const Home: () => React$Node = () => {
     loadSettings();
   }, []);
 
-  const showFilePicker = () => {
-    FilePicker.showFilePicker(null, response => {
-      if (response.didCancel) {
-        ToastAndroid.show(
-          'Você não escolheu nenhum arquivo!',
-          ToastAndroid.SHORT,
-        );
-      } else if (response.error) {
-        ToastAndroid.show(response.error, ToastAndroid.LONG);
-      } else {
-        const path = `file://${response.path}`;
-        setFilePath(path);
-      }
-    });
+  const selectFile = async () => {
+    const path = await showFilePicker();
+    if (path) setFilePath(path);
   };
 
   const saveCurrentSettings = () => {
@@ -156,6 +146,7 @@ const Home: () => React$Node = () => {
                           <Text style={styles.formLabel}>Formato do vídeo</Text>
                           <VideoFormatsPicker
                             onValueChange={format => setSelectedFormat(format)}
+                            selectedFormat={selectedFormat}
                           />
                           <Text style={styles.formLabel}>
                             Tamanho dos vídeos
@@ -185,7 +176,7 @@ const Home: () => React$Node = () => {
                         <Button
                           rounded
                           info
-                          onPress={showFilePicker}
+                          onPress={selectFile}
                           block
                           style={styles.searchButton}>
                           <Icon type="FontAwesome" name="search" />
