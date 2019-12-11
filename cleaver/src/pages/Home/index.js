@@ -13,7 +13,6 @@ import {
   SafeAreaView,
   ScrollView,
   StatusBar,
-  Dimensions,
   ToastAndroid,
   Clipboard,
 } from 'react-native';
