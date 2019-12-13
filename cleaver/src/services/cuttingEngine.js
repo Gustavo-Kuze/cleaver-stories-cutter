@@ -1,6 +1,7 @@
 import {RNFFmpeg} from 'react-native-ffmpeg';
 import moment from 'moment';
 import {ToastAndroid} from 'react-native';
+import FileSystem from 'react-native-fs';
 
 let intervalRef = null;
 let isCanceled = false;
@@ -33,17 +34,28 @@ const sliceVideo = async (
 
   for (let i = 0; i < repeatCount; i += 1) {
     if (!isCanceled) {
+      const pathName = getOutputFilePath(
+        outputDirectory,
+        filePath,
+        format,
+        i,
+        true,
+      );
+      const fileExists = await FileSystem.exists(pathName);
+      if (fileExists) {
+        ToastAndroid.show(
+          'O arquivo já foi fatiado nesse diretório, por favor escolha outro ou apague os vídeos previamente processados',
+          ToastAndroid.LONG,
+        );
+
+        return;
+      }
+
       await cut(
         filePath,
-        outputDirectory
-          ? `"file://${outputDirectory}/${getFileNameFromPath(filePath).replace(
-              format,
-              '',
-            )}${i}${format}"`
-          : `${filePath.replace(format, '')}${i}${format}`,
+        getOutputFilePath(outputDirectory, filePath, format, i),
         start,
         seconds,
-        status => {},
       );
       statusCallback({
         message: `Progresso ${i} de ${repeatCount - 1}...`,
@@ -62,6 +74,23 @@ const sliceVideo = async (
       message: 'Processo cancelado',
     });
   }
+};
+
+const getOutputFilePath = (
+  outputDirectory,
+  filePath,
+  format,
+  i,
+  isCheckingIfExists,
+) => {
+  return outputDirectory
+    ? `${isCheckingIfExists ? '' : '"'}${
+        isCheckingIfExists ? '' : 'file://'
+      }${outputDirectory}/${getFileNameFromPath(filePath).replace(
+        format,
+        '',
+      )}${i}${format}${isCheckingIfExists ? '' : '"'}`
+    : `${filePath.replace(format, '')}${i}${format}`;
 };
 
 const cut = async (
@@ -96,7 +125,9 @@ const cut = async (
         clearInterval(intervalRef);
         return;
       }
-      statusCallback(status);
+      if (statusCallback && typeof statusCallback === 'function') {
+        statusCallback(status);
+      }
     }, 5);
   });
 };
