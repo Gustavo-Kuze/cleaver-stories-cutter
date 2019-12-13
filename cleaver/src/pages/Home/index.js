@@ -37,6 +37,7 @@ import {sliceVideo, cancel} from '../../services/cuttingEngine';
 import {saveSettings, loadSetting} from '../../services/settings';
 import VideoFormatsPicker from '../../components/VideoFormatsPicker';
 import {showFilePicker} from '../../utils/fs';
+import FileSystem from 'react-native-fs';
 
 // video path storage/emulated/0/Download/video.mp4
 
@@ -81,7 +82,6 @@ const Home: () => React$Node = () => {
   };
 
   const startCutting = async () => {
-    saveCurrentSettings();
     if (!filePath) {
       ToastAndroid.show(
         'Você ainda não escolheu um arquivo!',
@@ -89,6 +89,16 @@ const Home: () => React$Node = () => {
       );
       return;
     }
+    const directoryExists = await FileSystem.exists(outputPath);
+    if (!directoryExists) {
+      ToastAndroid.show(
+        'O diretório de saída escolhido não existe! Crie a pasta antes de prosseguir.',
+        ToastAndroid.LONG,
+      );
+      return;
+    }
+
+    saveCurrentSettings();
     setLoading(true);
     setIsProcessStarted(true);
     await sliceVideo(
