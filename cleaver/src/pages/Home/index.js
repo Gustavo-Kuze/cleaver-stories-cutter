@@ -176,7 +176,7 @@ const Home = () => {
                           </Row>
                         </Form>
                       </Col>
-                      <Col size={2}>
+                      <Col size={2} style={styles.formButtonsCol}>
                         <Button
                           rounded
                           info

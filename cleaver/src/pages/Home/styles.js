@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
   loader: {
     marginTop: -20,
   },
-  searchButton: {marginTop: 6},
-  pasteButton: {marginTop: 10},
+  searchButton: {},
+  pasteButton: {},
   progressLabel: {
     textAlign: 'center',
   },
@@ -51,6 +51,11 @@ const styles = StyleSheet.create({
     marginRight: 8,
     marginBottom: 3,
     marginLeft: 8,
+  },
+  formButtonsCol: {
+    justifyContent: 'space-between',
+    height: 100,
+    marginTop: 5,
   },
 });
 
