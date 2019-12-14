@@ -40,8 +40,6 @@ import {showFilePicker} from '../../utils/fs';
 import FileSystem from 'react-native-fs';
 import {toast} from '../../utils/sysUtils';
 
-// video path storage/emulated/0/Download/video.mp4
-
 const Home = () => {
   const [filePath, setFilePath] = useState('');
   const [outputPath, setOutputPath] = useState('');
@@ -203,7 +201,7 @@ const Home = () => {
                       </Col>
                     </Row>
                     <Row style={styles.startStopButtonsRow}>
-                      {isProcessStarted && (
+                      {!!isProcessStarted && (
                         <Col>
                           <Button
                             danger
@@ -215,15 +213,17 @@ const Home = () => {
                           </Button>
                         </Col>
                       )}
-                      <Col>
-                        <Button
-                          success
-                          block
-                          onPress={startCutting}
-                          style={styles.button}>
-                          <Text>Iniciar</Text>
-                        </Button>
-                      </Col>
+                      {!isProcessStarted && (
+                        <Col>
+                          <Button
+                            success
+                            block
+                            onPress={startCutting}
+                            style={styles.button}>
+                            <Text>Iniciar</Text>
+                          </Button>
+                        </Col>
+                      )}
                     </Row>
                     <Row style={styles.progressRow}>
                       <Col>
