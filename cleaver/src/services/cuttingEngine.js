@@ -1,6 +1,5 @@
 import {RNFFmpeg} from 'react-native-ffmpeg';
 import moment from 'moment';
-import {ToastAndroid} from 'react-native';
 import FileSystem from 'react-native-fs';
 import {toast} from '../utils/sysUtils';
 
@@ -42,6 +41,7 @@ const sliceVideo = async (
         i,
         true,
       );
+
       const fileExists = await FileSystem.exists(pathName);
       if (fileExists) {
         return toast(
@@ -55,6 +55,7 @@ const sliceVideo = async (
         start,
         seconds,
       );
+
       statusCallback({
         message: `Progresso ${i} de ${repeatCount - 1}...`,
         progress: {completed: i, total: repeatCount},
@@ -102,7 +103,7 @@ const cut = async (
     RNFFmpeg.resetStatistics();
     RNFFmpeg.enableLogCallback(log => {
       if (log.log.includes('Conversion failed')) {
-        ToastAndroid.show('Erro ao cortar o arquivo', ToastAndroid.LONG);
+        toast('Erro ao cortar o arquivo');
         cancel();
       }
     });
