@@ -95,11 +95,13 @@ const Home = () => {
     if (!filePath) {
       return toast('Você ainda não escolheu um arquivo!');
     }
-    const directoryExists = await FileSystem.exists(outputPath);
-    if (!directoryExists) {
-      return toast(
-        'O diretório de saída escolhido não existe! Crie a pasta antes de prosseguir.',
-      );
+    if (outputPath) {
+      const directoryExists = await FileSystem.exists(outputPath);
+      if (!directoryExists) {
+        return toast(
+          'O diretório de saída escolhido não existe! Crie a pasta antes de prosseguir.',
+        );
+      }
     }
 
     setStart();
