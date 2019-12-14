@@ -144,17 +144,19 @@ const Home = () => {
                         <Row style={styles.topRow}>
                           <Col size={8}>
                             <Form>
-                              <Item style={styles.input}>
+                              <Item style={styles.inputItem}>
                                 <Input
                                   placeholder="Caminho do arquivo de vídeo"
                                   value={filePath}
+                                  style={styles.input}
                                 />
                               </Item>
-                              <Item style={styles.input}>
+                              <Item style={styles.inputItem}>
                                 <Input
                                   placeholder="Diretório de saída (opcional)"
                                   value={outputPath}
                                   onChangeText={text => setOutputPath(text)}
+                                  style={styles.input}
                                 />
                               </Item>
                               <Text style={styles.formLabel}>

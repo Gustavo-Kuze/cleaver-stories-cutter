@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     width: Dimensions.get('screen').width - Dimensions.get('screen').width / 5,
     height: 40,
   },
-  input: {
+  inputItem: {
     marginRight: 8,
     marginBottom: 3,
     marginLeft: 8,
@@ -56,6 +56,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     height: 100,
     marginTop: 5,
+  },
+  input: {
+    fontSize: 15,
   },
 });
 
