@@ -15,8 +15,6 @@ const VideoFormatsPicker = ({onValueChange, selectedFormat}) => {
       }}>
       <Picker.Item label="MP4" value=".mp4" />
       <Picker.Item label="AVI" value=".avi" />
-      <Picker.Item label="M4A" value=".m4a" />
-      <Picker.Item label="WMV" value=".wmv" />
       <Picker.Item label="MOV" value=".mov" />
       <Picker.Item label="FLV" value=".flv" />
     </Picker>
