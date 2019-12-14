@@ -50,11 +50,9 @@ const Home = () => {
   const [seconds, setSeconds] = useState(15);
 
   const loadSettings = async () => {
-    const filePathSaved = await loadSetting('filePath');
     const outputPathSaved = await loadSetting('outputPath');
     const selectedFormatSaved = await loadSetting('selectedFormat');
     const secondsSaved = await loadSetting('seconds');
-    setFilePath(filePathSaved || '');
     setOutputPath(outputPathSaved || '');
     setSeconds(secondsSaved || 15);
     if (selectedFormatSaved) {
@@ -73,7 +71,6 @@ const Home = () => {
 
   const setStart = () => {
     saveSettings({
-      filePath,
       outputPath,
       selectedFormat,
       seconds,
