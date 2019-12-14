@@ -6,7 +6,6 @@ const VideoFormatsPicker = ({onValueChange, selectedFormat}) => {
   return (
     <Picker
       mode="dropdown"
-      iosHeader="Select your SIM"
       iosIcon={<Icon name="arrow-down" />}
       style={styles.picker}
       selectedValue={selectedFormat}

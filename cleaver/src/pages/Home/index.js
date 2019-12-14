@@ -38,10 +38,11 @@ import {saveSettings, loadSetting} from '../../services/settings';
 import VideoFormatsPicker from '../../components/VideoFormatsPicker';
 import {showFilePicker} from '../../utils/fs';
 import FileSystem from 'react-native-fs';
+import {toast} from '../../utils/sysUtils';
 
 // video path storage/emulated/0/Download/video.mp4
 
-const Home: () => React$Node = () => {
+const Home = () => {
   const [filePath, setFilePath] = useState('');
   const [outputPath, setOutputPath] = useState('');
   const [progressStatus, setProgressStatus] = useState('');
@@ -72,35 +73,35 @@ const Home: () => React$Node = () => {
     if (path) setFilePath(path);
   };
 
-  const saveCurrentSettings = () => {
+  const setStart = () => {
     saveSettings({
       filePath,
       outputPath,
       selectedFormat,
       seconds,
     });
+    setLoading(true);
+    setIsProcessStarted(true);
+  };
+
+  const setStop = () => {
+    setLoading(false);
+    setIsProcessStarted(false);
   };
 
   const startCutting = async () => {
     if (!filePath) {
-      ToastAndroid.show(
-        'Você ainda não escolheu um arquivo!',
-        ToastAndroid.SHORT,
-      );
-      return;
+      return toast('Você ainda não escolheu um arquivo!');
     }
     const directoryExists = await FileSystem.exists(outputPath);
     if (!directoryExists) {
-      ToastAndroid.show(
+      return toast(
         'O diretório de saída escolhido não existe! Crie a pasta antes de prosseguir.',
-        ToastAndroid.LONG,
       );
-      return;
     }
 
-    saveCurrentSettings();
-    setLoading(true);
-    setIsProcessStarted(true);
+    setStart();
+
     await sliceVideo(
       filePath,
       status => {
@@ -111,14 +112,12 @@ const Home: () => React$Node = () => {
       outputPath,
     );
 
-    setLoading(false);
-    setIsProcessStarted(false);
+    setStop();
   };
 
   const callCancel = () => {
     ToastAndroid.show(cancel(), ToastAndroid.LONG);
-    setLoading(false);
-    setIsProcessStarted(false);
+    setStop();
     setProgressStatus('');
   };
 

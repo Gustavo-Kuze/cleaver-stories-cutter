@@ -2,6 +2,7 @@ import {RNFFmpeg} from 'react-native-ffmpeg';
 import moment from 'moment';
 import {ToastAndroid} from 'react-native';
 import FileSystem from 'react-native-fs';
+import {toast} from '../utils/sysUtils';
 
 let intervalRef = null;
 let isCanceled = false;
@@ -43,12 +44,9 @@ const sliceVideo = async (
       );
       const fileExists = await FileSystem.exists(pathName);
       if (fileExists) {
-        ToastAndroid.show(
+        return toast(
           'O arquivo já foi fatiado nesse diretório, por favor escolha outro ou apague os vídeos previamente processados',
-          ToastAndroid.LONG,
         );
-
-        return;
       }
 
       await cut(

@@ -1,21 +1,17 @@
 import FilePicker from 'react-native-file-picker';
-import {ToastAndroid} from 'react-native';
+import {toast} from './sysUtils';
 
 const showFilePicker = () => {
   return new Promise((resolve, reject) => {
     FilePicker.showFilePicker(null, response => {
       if (response.didCancel) {
-        ToastAndroid.show(
-          'Você não escolheu nenhum arquivo!',
-          ToastAndroid.SHORT,
-        );
+        toast('Você não escolheu nenhum arquivo!');
         resolve('');
       } else if (response.error) {
-        ToastAndroid.show(response.error, ToastAndroid.LONG);
+        toast(response.error);
         reject(response.error);
       } else {
-        const path = `file://${response.path}`;
-        resolve(path);
+        resolve(`file://${response.path}`);
       }
     });
   });
