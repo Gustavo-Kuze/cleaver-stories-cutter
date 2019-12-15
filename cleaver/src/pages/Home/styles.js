@@ -33,11 +33,11 @@ const styles = StyleSheet.create({
     elevation: 8,
     zIndex: 3,
     backgroundColor: 'white',
-    height: 280,
+    height: 320,
     paddingHorizontal: 10,
     paddingTop: 10,
   },
-  startStopButtonsRow: {marginTop: 90, marginBottom: 50},
+  startStopButtonsRow: {marginTop: 90, marginBottom: 60},
   seconds: {
     textAlign: 'right',
     marginTop: 8,
@@ -59,6 +59,10 @@ const styles = StyleSheet.create({
   },
   input: {
     fontSize: 15,
+  },
+  chkRemoveFirstSecond: {
+    marginTop: 10,
+    marginBottom: 20,
   },
 });
 

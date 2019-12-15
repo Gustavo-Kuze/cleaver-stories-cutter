@@ -25,6 +25,7 @@ const sliceVideo = async (
   seconds = 14,
   format = 'mp4',
   outputDirectory = '',
+  removeFirstSecond = false,
 ) => {
   isCanceled = false;
   const repeatCount = await getRepeatCount(filePath, seconds);
@@ -60,7 +61,10 @@ const sliceVideo = async (
         message: `Progresso ${i} de ${repeatCount - 1}...`,
         progress: {completed: i, total: repeatCount},
       });
-      mom = mom.add(parseInt(seconds, 10) + 1, 'seconds');
+      mom = mom.add(
+        parseInt(seconds, 10) + (removeFirstSecond ? 1 : 0),
+        'seconds',
+      );
       start = mom.format('00:mm:ss');
     }
   }

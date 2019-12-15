@@ -31,6 +31,7 @@ import {
   Title,
   Spinner,
   Content,
+  CheckBox,
 } from 'native-base';
 import {Col, Row, Grid} from 'react-native-easy-grid';
 import {sliceVideo, cancel} from '../../services/cuttingEngine';
@@ -50,16 +51,21 @@ const Home = () => {
   const [selectedFormat, setSelectedFormat] = useState('.mp4');
   const [seconds, setSeconds] = useState(15);
   const [hideSplash, setHideSplash] = useState(false);
+  const [removeFirstSecond, setRemoveFirstSecond] = useState(true);
 
   const loadSettings = async () => {
     const outputPathSaved = await loadSetting('outputPath');
     const selectedFormatSaved = await loadSetting('selectedFormat');
     const secondsSaved = await loadSetting('seconds');
+    const removeFirstSecondSaved = await loadSetting('removeFirstSecond');
     setOutputPath(outputPathSaved || '');
     setSeconds(secondsSaved || 15);
     if (selectedFormatSaved) {
       setSelectedFormat(selectedFormatSaved);
     }
+    setRemoveFirstSecond(
+      removeFirstSecondSaved && removeFirstSecondSaved !== 'false',
+    );
   };
 
   useEffect(() => {
@@ -81,6 +87,7 @@ const Home = () => {
       outputPath,
       selectedFormat,
       seconds,
+      removeFirstSecond,
     });
     setLoading(true);
     setIsProcessStarted(true);
@@ -114,6 +121,7 @@ const Home = () => {
       seconds,
       selectedFormat,
       outputPath,
+      removeFirstSecond,
     );
 
     setStop();
@@ -161,9 +169,28 @@ const Home = () => {
                                   style={styles.input}
                                 />
                               </Item>
+                              <Row style={styles.chkRemoveFirstSecond}>
+                                <Col size={2}>
+                                  <CheckBox
+                                    checked={removeFirstSecond}
+                                    onPress={() => {
+                                      setRemoveFirstSecond(!removeFirstSecond);
+                                    }}
+                                  />
+                                </Col>
+                                <Col size={10}>
+                                  <Text
+                                    onPress={() => {
+                                      setRemoveFirstSecond(!removeFirstSecond);
+                                    }}>
+                                    Pular primeiro segundo
+                                  </Text>
+                                </Col>
+                              </Row>
                               <Text style={styles.formLabel}>
                                 Formato do vídeo
                               </Text>
+
                               <VideoFormatsPicker
                                 onValueChange={format =>
                                   setSelectedFormat(format)
