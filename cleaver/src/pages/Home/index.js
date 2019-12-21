@@ -51,21 +51,19 @@ const Home = () => {
   const [selectedFormat, setSelectedFormat] = useState('.mp4');
   const [seconds, setSeconds] = useState(15);
   const [hideSplash, setHideSplash] = useState(false);
-  const [removeFirstSecond, setRemoveFirstSecond] = useState(true);
+  const [quickCut, setquickCut] = useState(true);
 
   const loadSettings = async () => {
     const outputPathSaved = await loadSetting('outputPath');
     const selectedFormatSaved = await loadSetting('selectedFormat');
     const secondsSaved = await loadSetting('seconds');
-    const removeFirstSecondSaved = await loadSetting('removeFirstSecond');
+    const quickCutSaved = await loadSetting('quickCut');
     setOutputPath(outputPathSaved || '');
     setSeconds(secondsSaved || 15);
     if (selectedFormatSaved) {
       setSelectedFormat(selectedFormatSaved);
     }
-    setRemoveFirstSecond(
-      removeFirstSecondSaved && removeFirstSecondSaved !== 'false',
-    );
+    setquickCut(quickCutSaved && quickCutSaved !== 'false');
   };
 
   useEffect(() => {
@@ -87,7 +85,7 @@ const Home = () => {
       outputPath,
       selectedFormat,
       seconds,
-      removeFirstSecond,
+      quickCut,
     });
     setLoading(true);
     setIsProcessStarted(true);
@@ -121,7 +119,7 @@ const Home = () => {
       seconds,
       selectedFormat,
       outputPath,
-      removeFirstSecond,
+      quickCut,
     );
 
     setStop();
@@ -169,21 +167,21 @@ const Home = () => {
                                   style={styles.input}
                                 />
                               </Item>
-                              <Row style={styles.chkRemoveFirstSecond}>
+                              <Row style={styles.chkquickCut}>
                                 <Col size={2}>
                                   <CheckBox
-                                    checked={removeFirstSecond}
+                                    checked={quickCut}
                                     onPress={() => {
-                                      setRemoveFirstSecond(!removeFirstSecond);
+                                      setquickCut(!quickCut);
                                     }}
                                   />
                                 </Col>
                                 <Col size={10}>
                                   <Text
                                     onPress={() => {
-                                      setRemoveFirstSecond(!removeFirstSecond);
+                                      setquickCut(!quickCut);
                                     }}>
-                                    Pular primeiro segundo
+                                    Corte rápido
                                   </Text>
                                 </Col>
                               </Row>

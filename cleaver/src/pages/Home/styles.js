@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
   input: {
     fontSize: 15,
   },
-  chkRemoveFirstSecond: {
+  chkquickCut: {
     marginTop: 10,
     marginBottom: 20,
   },

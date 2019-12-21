@@ -7,11 +7,11 @@ let intervalRef = null;
 let isCanceled = false;
 const defaultInitialDate = '01/05/1992';
 
-const getRepeatCount = async (filePath, seconds = 15) => {
+const getRepeatCount = async (filePath, seconds = 15, quickCut = false) => {
   const mediaInformation = await RNFFmpeg.getMediaInformation(filePath);
   const totalSeconds = mediaInformation.duration / 1000;
   const slicesFloat = totalSeconds / seconds;
-  return Math.floor(slicesFloat);
+  return Math.floor(slicesFloat) + (quickCut ? 0 : 1);
 };
 
 const getFileNameFromPath = path => {
@@ -25,10 +25,10 @@ const sliceVideo = async (
   seconds = 14,
   format = 'mp4',
   outputDirectory = '',
-  removeFirstSecond = false,
+  quickCut = false,
 ) => {
   isCanceled = false;
-  const repeatCount = await getRepeatCount(filePath, seconds);
+  const repeatCount = await getRepeatCount(filePath, seconds, quickCut);
 
   let mom = moment(defaultInitialDate, 'DD/MM/YYYY');
   let start = mom.format('00:mm:ss');
@@ -55,16 +55,15 @@ const sliceVideo = async (
         getOutputFilePath(outputDirectory, filePath, format, i),
         start,
         seconds,
+        () => {},
+        quickCut,
       );
 
       statusCallback({
         message: `Progresso ${i} de ${repeatCount - 1}...`,
         progress: {completed: i, total: repeatCount},
       });
-      mom = mom.add(
-        parseInt(seconds, 10) + (removeFirstSecond ? 1 : 0),
-        'seconds',
-      );
+      mom = mom.add(parseInt(seconds, 10) + (quickCut ? 1 : 0), 'seconds');
       start = mom.format('00:mm:ss');
     }
   }
@@ -102,6 +101,7 @@ const cut = async (
   start,
   seconds,
   statusCallback,
+  quickCut,
 ) => {
   return new Promise((res, rej) => {
     RNFFmpeg.resetStatistics();
@@ -112,7 +112,9 @@ const cut = async (
       }
     });
     RNFFmpeg.execute(
-      ` -ss ${start} -i "${filePath}" -t ${seconds} -c copy ${outputFileName}`,
+      quickCut
+        ? ` -ss ${start} -i "${filePath}" -t ${seconds} -c copy ${outputFileName}`
+        : `-i "${filePath}" -ss ${start}.000 -codec copy -t ${seconds}.000 -y ${outputFileName}`,
     )
       .then(() => {
         clearInterval(intervalRef);
