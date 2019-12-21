@@ -112,7 +112,7 @@ const cut = async (
       }
     });
     RNFFmpeg.execute(
-      ` -ss ${start} -i ${filePath} -t ${seconds} -c copy ${outputFileName}`,
+      ` -ss ${start} -i "${filePath}" -t ${seconds} -c copy ${outputFileName}`,
     )
       .then(() => {
         clearInterval(intervalRef);
