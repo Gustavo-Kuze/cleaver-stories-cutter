@@ -51,7 +51,7 @@ const Home = () => {
   const [selectedFormat, setSelectedFormat] = useState('.mp4');
   const [seconds, setSeconds] = useState(15);
   const [hideSplash, setHideSplash] = useState(false);
-  const [quickCut, setquickCut] = useState(true);
+  const [quickCut, setquickCut] = useState(false);
 
   const loadSettings = async () => {
     const outputPathSaved = await loadSetting('outputPath');

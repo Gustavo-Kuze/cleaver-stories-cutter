@@ -17,6 +17,7 @@ const styles = StyleSheet.create({
   },
   loader: {
     marginTop: -20,
+    marginBottom: -10,
   },
   searchButton: {},
   pasteButton: {},
