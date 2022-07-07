@@ -13,7 +13,7 @@
   "dependencies": {
     "@react-native-community/async-storage": "^1.6.3",
     "@react-native-community/slider": "^2.0.7",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "native-base": "^2.13.8",
     "react": "16.9.0",
     "react-native": "0.61.5",
